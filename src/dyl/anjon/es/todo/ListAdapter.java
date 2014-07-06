@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public class ListAdapter extends BaseAdapter {
@@ -39,8 +40,9 @@ public class ListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_item, null);
 		String item = rowList.get(position);
-		TextView name = (TextView) v.findViewById(R.id.name);
+		CheckBox name = (CheckBox) v.findViewById(R.id.name);
 		name.setText(item);
+		name.setChecked(false);
 		return v;
 	}
 	
