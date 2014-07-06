@@ -5,11 +5,11 @@ import java.util.ArrayList;
 public class ToDoList {
 
 	private String name;
-	private ArrayList<String> items;
+	private ArrayList<ToDoItem> items;
 
 	public ToDoList(String name) {
 		this.name = name;
-		this.items = new ArrayList<String>();
+		this.items = new ArrayList<ToDoItem>();
 	}
 
 	/**
@@ -30,16 +30,24 @@ public class ToDoList {
 	/**
 	 * @return the items
 	 */
-	public ArrayList<String> getItems() {
+	public ArrayList<ToDoItem> getItems() {
 		return items;
 	}
 
 	/**
+	 * @param item
+	 *            the item to add
+	 */
+	public void add(ToDoItem item) {
+		this.items.add(item);
+	}
+
+	/**
 	 * @param string
-	 *            the string to add
+	 *            the string to use to create a new item and add
 	 */
 	public void add(String string) {
-		this.items.add(string);
+		this.items.add(new ToDoItem(string));
 	}
 
 }
