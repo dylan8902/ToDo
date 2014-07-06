@@ -50,7 +50,6 @@ public class NavigationDrawerFragment extends Fragment {
 
 	public NavigationDrawerAdapter adapter;
 
-
 	public NavigationDrawerFragment() {
 	}
 

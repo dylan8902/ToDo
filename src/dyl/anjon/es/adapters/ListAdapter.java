@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import dyl.anjon.es.models.ToDoItem;
 import dyl.anjon.es.todo.R;
 
@@ -39,8 +41,15 @@ public class ListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_item, null);
-		ToDoItem item = items.get(position);
+		final ToDoItem item = items.get(position);
 		CheckBox name = (CheckBox) v.findViewById(R.id.name);
+		name.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				item.setIsDone(isChecked);
+			}
+		});
 		name.setText(item.getName());
 		name.setChecked(item.isDone());
 		return v;

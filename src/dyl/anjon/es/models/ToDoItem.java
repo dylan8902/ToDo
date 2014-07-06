@@ -4,6 +4,9 @@ public class ToDoItem {
 
 	private String name;
 	private boolean isDone;
+	protected final static String ITEM_DELIMITTER = "\n";
+	protected final static String DONE = "✔ ";
+	protected final static String NOT_DONE = "- ";
 
 	public ToDoItem(String name) {
 		this.name = name;
@@ -38,6 +41,19 @@ public class ToDoItem {
 	 */
 	public void setIsDone(boolean isDone) {
 		this.isDone = isDone;
+	}
+
+	public String toString() {
+		StringBuilder string = new StringBuilder();
+		if (isDone()) {
+			string.append(DONE);
+		} else {
+			string.append(NOT_DONE);
+		}
+		string.append(getName());
+		string.append(ITEM_DELIMITTER);
+
+		return string.toString();
 	}
 
 }
