@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 import dyl.anjon.es.adapters.NavigationDrawerAdapter;
+import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.R;
 
 /**
@@ -45,6 +46,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerListView;
 	private View mFragmentContainerView;
+	private ArrayList<ToDoList> lists;
 
 	public NavigationDrawerAdapter adapter;
 
@@ -55,6 +57,7 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		lists = new ArrayList<ToDoList>();
 	}
 
 	@Override
@@ -79,10 +82,8 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		ArrayList<String> items = new ArrayList<String>();
-		items.add("Shopping");
-		items.add("TDD");
-		adapter = new NavigationDrawerAdapter(inflater, items);
+		
+		adapter = new NavigationDrawerAdapter(inflater, lists);
 		mDrawerListView.setAdapter(adapter);
 		mDrawerListView.setItemChecked(0, true);
 		return mDrawerListView;
@@ -102,9 +103,11 @@ public class NavigationDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(int fragmentId, DrawerLayout drawerLayout, ArrayList<ToDoList> lists) {
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
+		this.lists = lists;
+		adapter.refresh(lists);
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens

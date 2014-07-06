@@ -1,18 +1,18 @@
 package dyl.anjon.es.adapters;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.R;
 
 public class NavigationDrawerAdapter extends BaseAdapter {
 
-	private List<String> rowList;
+	private ArrayList<ToDoList> lists;
 	private LayoutInflater inflater = null;
 
 	/**
@@ -20,17 +20,17 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 	 * @param items
 	 */
 	public NavigationDrawerAdapter(LayoutInflater inflater,
-			ArrayList<String> items) {
-		this.rowList = items;
+			ArrayList<ToDoList> lists) {
+		this.lists = lists;
 		this.inflater = inflater;
 	}
 
 	public int getCount() {
-		return rowList.size();
+		return lists.size();
 	}
 
 	public String getItem(int position) {
-		return rowList.get(position);
+		return lists.get(position).getName();
 	}
 
 	public long getItemId(int position) {
@@ -39,14 +39,14 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_navigation_drawer_item, null);
-		String item = rowList.get(position);
+		ToDoList list = lists.get(position);
 		TextView name = (TextView) v.findViewById(R.id.name);
-		name.setText(item);
+		name.setText(list.getName());
 		return v;
 	}
 
-	public void refresh(ArrayList<String> items) {
-		this.rowList = items;
+	public void refresh(ArrayList<ToDoList> lists) {
+		this.lists = lists;
 		this.notifyDataSetChanged();
 	}
 

@@ -35,11 +35,11 @@ public class ToDoList {
 	}
 
 	/**
-	 * @param items
-	 *            the items to set
+	 * @param string
+	 *            the string to add
 	 */
-	public void setItems(ArrayList<String> items) {
-		this.items = items;
+	public void add(String string) {
+		this.items.add(string);
 	}
 
 }
