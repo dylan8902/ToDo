@@ -1,5 +1,7 @@
 package dyl.anjon.es.todo;
 
+import com.dropbox.sync.android.DbxAccountManager;
+
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -32,6 +34,7 @@ public class MainActivity extends ActionBarActivity implements
 	 * {@link #restoreActionBar()}.
 	 */
 	private CharSequence mTitle;
+	private DbxAccountManager mAccountManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,12 @@ public class MainActivity extends ActionBarActivity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		// Set up dropbox
+		mAccountManager = DbxAccountManager.getInstance(
+				getApplicationContext(), getString(R.string.db_app_key),
+				getString(R.string.db_app_secret));
+
 	}
 
 	@Override

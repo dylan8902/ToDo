@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="db_app_key">APP_KEY</string>
+    <string name="db_app_secret">APP_SECRET</string>
+</resources>
