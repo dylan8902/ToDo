@@ -17,6 +17,9 @@ import com.dropbox.sync.android.DbxDatastore;
 import com.dropbox.sync.android.DbxException;
 import com.dropbox.sync.android.DbxTable;
 
+import dyl.anjon.es.todo.fragments.ListFragment;
+import dyl.anjon.es.todo.fragments.NavigationDrawerFragment;
+
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -53,62 +56,72 @@ public class MainActivity extends ActionBarActivity implements
 		mAccountManager = DbxAccountManager.getInstance(
 				getApplicationContext(), getString(R.string.db_app_key),
 				getString(R.string.db_app_secret));
-		
+
 		if (mAccountManager.hasLinkedAccount()) {
-	        mAccount = mAccountManager.getLinkedAccount();
-	        
-	        //mAccount data is available here
-	        try {
-	        	mStore = DbxDatastore.openDefault(mAccount);
+			mAccount = mAccountManager.getLinkedAccount();
+
+			// mAccount data is available here
+			try {
+				mStore = DbxDatastore.openDefault(mAccount);
 			} catch (DbxException e) {
 				Log.e("ToDo", e.getMessage());
 			}
-	        
-	        DbxTable tasksTbl = mStore.getTable("tasks");
-	        try {
+
+			DbxTable tasksTbl = mStore.getTable("tasks");
+			try {
 				DbxTable.QueryResult results = tasksTbl.query();
 				Log.i("ToDo", results.toString());
 			} catch (DbxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	        /*
-	        tasksTbl.insert().set("taskname", "Milk").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Fresh Pasta").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Toilet Paper").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Aubergine").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Shampoo").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Bin Bags").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Fresh Fish").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Pesto").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Bread").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Crisps").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Cheese").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Bousin/Soft Cheese").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Pasta").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Thai jar").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Sweetcorn").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Chopped Tomatoes").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Chives").set("completed", false);
-	        tasksTbl.insert().set("taskname", "Sprinkle Cereal").set("completed", false);
-	        tasksTbl.insert().set("taskname", "OJ").set("completed", false);
-	        */
-	        try {
+			/*
+			 * tasksTbl.insert().set("taskname", "Milk").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Fresh Pasta").set("completed", false);
+			 * tasksTbl.insert().set("taskname",
+			 * "Toilet Paper").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Aubergine").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Shampoo").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Bin Bags").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Fresh Fish").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Pesto").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Bread").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Crisps").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Cheese").set("completed", false);
+			 * tasksTbl.insert().set("taskname",
+			 * "Bousin/Soft Cheese").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Pasta").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Thai jar").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Sweetcorn").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Chopped Tomatoes").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "Chives").set("completed",
+			 * false); tasksTbl.insert().set("taskname",
+			 * "Sprinkle Cereal").set("completed", false);
+			 * tasksTbl.insert().set("taskname", "OJ").set("completed", false);
+			 */
+			try {
 				mStore.sync();
 			} catch (DbxException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	        mStore.close();
+			mStore.close();
 
-	        
-	       // Set up the drawer.
-			mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-					(DrawerLayout) findViewById(R.id.drawer_layout));
-	        
-	    } else {
-	    	mAccountManager.startLink((Activity)MainActivity.this, REQUEST_LINK_TO_DBX);
-	    }
+		} else {
+			mAccountManager.startLink((Activity) MainActivity.this,
+					REQUEST_LINK_TO_DBX);
+		}
+
+		// Set up the drawer.
+		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
+				(DrawerLayout) findViewById(R.id.drawer_layout));
 
 	}
 
@@ -116,24 +129,13 @@ public class MainActivity extends ActionBarActivity implements
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						ListFragment.newInstance(position + 1)).commit();
+		fragmentManager.beginTransaction()
+				.replace(R.id.container, ListFragment.newInstance("Shopping"))
+				.commit();
 	}
 
-	public void onSectionAttached(int number) {
-		switch (number) {
-		case 1:
-			mTitle = getString(R.string.title_section1);
-			break;
-		case 2:
-			mTitle = getString(R.string.title_section2);
-			break;
-		case 3:
-			mTitle = getString(R.string.title_section3);
-			break;
-		}
+	public void onSectionAttached(String string) {
+		mTitle = string;
 	}
 
 	public void restoreActionBar() {
@@ -167,19 +169,19 @@ public class MainActivity extends ActionBarActivity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if (requestCode == REQUEST_LINK_TO_DBX) {
-	        if (resultCode == Activity.RESULT_OK) {
-	            mAccount = mAccountManager.getLinkedAccount();
-	            //mAccount data available here!
-	        } else {
-	            
-	        }
-	    } else {
-	        super.onActivityResult(requestCode, resultCode, data);
-	    }
+		if (requestCode == REQUEST_LINK_TO_DBX) {
+			if (resultCode == Activity.RESULT_OK) {
+				mAccount = mAccountManager.getLinkedAccount();
+				// mAccount data available here!
+			} else {
+
+			}
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 }

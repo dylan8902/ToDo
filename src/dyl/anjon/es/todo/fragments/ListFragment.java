@@ -1,12 +1,6 @@
-package dyl.anjon.es.todo;
+package dyl.anjon.es.todo.fragments;
 
 import java.util.ArrayList;
-
-import com.dropbox.sync.android.DbxAccount;
-import com.dropbox.sync.android.DbxAccountManager;
-import com.dropbox.sync.android.DbxDatastore;
-import com.dropbox.sync.android.DbxException;
-import com.dropbox.sync.android.DbxTable;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -17,19 +11,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.dropbox.sync.android.DbxAccount;
+import com.dropbox.sync.android.DbxAccountManager;
+import com.dropbox.sync.android.DbxDatastore;
+import com.dropbox.sync.android.DbxException;
+import com.dropbox.sync.android.DbxTable;
+
+import dyl.anjon.es.adapters.ListAdapter;
+import dyl.anjon.es.todo.MainActivity;
+import dyl.anjon.es.todo.R;
+
 public class ListFragment extends Fragment {
 
 	public ListAdapter adapter;
 
-	private static final String ARG_SECTION_NUMBER = "section_number";
+	private static final String ARG_LIST_NAME = "List";
 
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
-	public static ListFragment newInstance(int sectionNumber) {
+	public static ListFragment newInstance(String listName) {
 		ListFragment fragment = new ListFragment();
 		Bundle args = new Bundle();
-		args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+		args.putString(ARG_LIST_NAME, listName);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -87,7 +91,7 @@ public class ListFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((MainActivity) activity).onSectionAttached(getArguments().getInt(
-				ARG_SECTION_NUMBER));
+		((MainActivity) activity).onSectionAttached(getArguments().getString(
+				ARG_LIST_NAME));
 	}
 }
