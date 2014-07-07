@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,7 +18,6 @@ import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.fragments.ListFragment;
 import dyl.anjon.es.todo.fragments.NavigationDrawerFragment;
 import dyl.anjon.es.todo.utils.FileUtils;
-import dyl.anjon.es.todo.utils.Utils;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -141,8 +139,9 @@ public class MainActivity extends ActionBarActivity implements
 			mDbxAcctMgr.startLink((Activity) this, REQUEST_LINK_TO_DBX);
 			return true;
 		case R.id.action_add_list:
-			Log.d(Utils.LOG_TAG, "Adding from the MainActivity");
-			lists.add(new ToDoList("new"));
+			ToDoList list = new ToDoList("new");
+			lists.add(list);
+			mNavigationDrawerFragment.adapter.refresh(lists);
 			saveLists();
 			return true;
 		}
