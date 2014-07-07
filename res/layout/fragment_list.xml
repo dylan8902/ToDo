@@ -1,26 +1,29 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="dyl.anjon.es.todo.MainActivity$PlaceholderFragment" >
+    tools:context="dyl.anjon.es.todo.MainActivity$ListFragment" >
 
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollingCache="true" />
 
     <EditText
         android:id="@+id/add_item"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textCapWords"
+        android:background="#fff"
+        android:textSize="24sp"
+        android:padding="6dp"
         android:hint="@string/add_item_hint"
-        android:ems="10"
-        android:layout_alignBottom="@+id/list" />
+        android:inputType="textCapWords" />
 
-</RelativeLayout>
+</LinearLayout>

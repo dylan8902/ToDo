@@ -1301,6 +1301,7 @@ containing a value of this type.
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f0b008c;
+        public static final int ListItem=0x7f0b008e;
         public static final int NavigationDrawerItems=0x7f0b008d;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
