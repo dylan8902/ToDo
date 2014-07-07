@@ -12,26 +12,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import dyl.anjon.es.adapters.ListAdapter;
 import dyl.anjon.es.models.ToDoList;
-import dyl.anjon.es.todo.MainActivity;
 import dyl.anjon.es.todo.R;
 
 public class ListFragment extends Fragment {
 
 	public ListAdapter adapter;
 	private ToDoList list;
-
-	private static final String ARG_LIST_NAME = "List";
-
-	/**
-	 * Returns a new instance of this fragment for the given section number.
-	 */
-	public static ListFragment newInstance(ToDoList list) {
-		ListFragment fragment = new ListFragment(list);
-		Bundle args = new Bundle();
-		args.putString(ARG_LIST_NAME, list.getName());
-		fragment.setArguments(args);
-		return fragment;
-	}
+	private ListCallbacks mCallbacks;
 
 	public ListFragment(ToDoList list) {
 		this.list = list;
@@ -47,7 +34,7 @@ public class ListFragment extends Fragment {
 		v.setAdapter(adapter);
 
 		final EditText addItem = (EditText) rootView.findViewById(R.id.add_item);
-		addItem.setImeActionLabel("Add Item", KeyEvent.KEYCODE_ENTER);
+		addItem.setImeActionLabel("Add", KeyEvent.KEYCODE_ENTER);
 		addItem.setOnKeyListener(new OnKeyListener() {
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -59,6 +46,9 @@ public class ListFragment extends Fragment {
 					}
 					addItem.setText("");
 					adapter.refresh(list.getItems());
+					if (mCallbacks != null) {
+						mCallbacks.onListChanged(list);
+					}
 					return false;
 				}
 				return false;
@@ -67,11 +57,27 @@ public class ListFragment extends Fragment {
 
 		return rootView;
 	}
-
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		((MainActivity) activity).onSectionAttached(getArguments().getString(
-				ARG_LIST_NAME));
+		try {
+			mCallbacks = (ListCallbacks) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(
+					"Activity must implement ListCallbacks.");
+		}
 	}
+	
+	/**
+	 * Callbacks interface that all activities using this fragment must
+	 * implement.
+	 */
+	public static interface ListCallbacks {
+		/**
+		 * Called when the list changes.
+		 */
+		void onListChanged(ToDoList list);
+	}
+
 }

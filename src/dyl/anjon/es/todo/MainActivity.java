@@ -19,7 +19,8 @@ import dyl.anjon.es.todo.fragments.ListFragment;
 import dyl.anjon.es.todo.fragments.NavigationDrawerFragment;
 
 public class MainActivity extends ActionBarActivity implements
-		NavigationDrawerFragment.NavigationDrawerCallbacks {
+		NavigationDrawerFragment.NavigationDrawerCallbacks,
+		ListFragment.ListCallbacks {
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
@@ -37,6 +38,11 @@ public class MainActivity extends ActionBarActivity implements
 	 * Used to store the lists of todo lists
 	 */
 	private ArrayList<ToDoList> lists;
+
+	/**
+	 * Used to store the currently selected list
+	 */
+	private int selectedListIndex;
 
 	/**
 	 * Dropbox bits and bobs
@@ -60,21 +66,15 @@ public class MainActivity extends ActionBarActivity implements
 
 		// Set up the lists.
 		/*
-		ToDoList shoppingList = new ToDoList("Shopping");
-		shoppingList.add("Cheese");
-		shoppingList.add("Milk");
-		ToDoItem bread = new ToDoItem("Bread");
-		bread.setIsDone(true);
-		shoppingList.add(bread);
-		shoppingList.add("Cake");
-		ToDoList tddList = new ToDoList("TDD");
-		tddList.add("Create cool todo app");
-		lists = new ArrayList<ToDoList>();
-		lists.add(shoppingList);
-		lists.add(tddList);
-		*/
+		 * ToDoList shoppingList = new ToDoList("Shopping");
+		 * shoppingList.add("Cheese"); shoppingList.add("Milk"); ToDoItem bread
+		 * = new ToDoItem("Bread"); bread.setIsDone(true);
+		 * shoppingList.add(bread); shoppingList.add("Cake"); ToDoList tddList =
+		 * new ToDoList("TDD"); tddList.add("Create cool todo app"); lists = new
+		 * ArrayList<ToDoList>(); lists.add(shoppingList); lists.add(tddList);
+		 */
 		openLists();
-		
+
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout), lists);
 
@@ -82,16 +82,18 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
+		selectedListIndex = position;
+		ToDoList list = lists.get(selectedListIndex);
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						ListFragment.newInstance(lists.get(position))).commit();
+		fragmentManager.beginTransaction()
+				.replace(R.id.container, new ListFragment(list)).commit();
+		mTitle = list.getName();
 	}
 
-	public void onSectionAttached(String string) {
-		mTitle = string;
+	@Override
+	public void onListChanged(ToDoList list) {
+		lists.set(selectedListIndex, list);
+		saveLists();
 	}
 
 	public void restoreActionBar() {
@@ -131,7 +133,6 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		switch (item.getItemId()) {
 		case R.id.action_settings:
 			// settings activity
@@ -160,11 +161,11 @@ public class MainActivity extends ActionBarActivity implements
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
-	
+
 	public void saveLists() {
 		ToDoList.saveListsForAccount(lists, mDbxAcctMgr);
 	}
-	
+
 	public void openLists() {
 		lists = ToDoList.openListsForAccount(mDbxAcctMgr);
 	}

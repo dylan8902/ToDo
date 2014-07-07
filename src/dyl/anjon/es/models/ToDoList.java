@@ -88,7 +88,13 @@ public class ToDoList {
 		try {
 			DbxFileSystem dbxFs = DbxFileSystem.forAccount(mDbxAcctMgr
 					.getLinkedAccount());
-			testFile = dbxFs.create(new DbxPath(FILENAME));
+			DbxPath filePath = new DbxPath(FILENAME);
+			if (dbxFs.exists(filePath)) {
+				testFile = dbxFs.open(filePath);
+			}
+			else {
+				testFile = dbxFs.create(filePath);
+			}
 			testFile.writeString(string.toString());
 		} catch (Unauthorized e) {
 			Log.e(LOG_TAG, e.getMessage());
