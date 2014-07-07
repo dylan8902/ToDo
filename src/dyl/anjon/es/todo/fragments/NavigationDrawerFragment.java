@@ -13,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,7 @@ import android.widget.ListView;
 import dyl.anjon.es.adapters.NavigationDrawerAdapter;
 import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.R;
+import dyl.anjon.es.todo.utils.Utils;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -99,6 +101,9 @@ public class NavigationDrawerFragment extends Fragment {
 													int which) {
 												lists.remove(index);
 												adapter.refresh(lists);
+												if (mCallbacks != null) {
+													mCallbacks.onListsChanged(lists);
+												}
 											}
 										}).show();
 						return true;
@@ -231,16 +236,9 @@ public class NavigationDrawerFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Log.d(Utils.LOG_TAG, "Menu item selected in Nav Drawer: " + item.getTitle());
+		
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-
-		switch (item.getItemId()) {
-		case R.id.action_settings:
-			// settings activity
-			return true;
-		case R.id.action_add_list:
-			lists.add(new ToDoList("new"));
 			return true;
 		}
 
@@ -272,5 +270,6 @@ public class NavigationDrawerFragment extends Fragment {
 		 * Called when an item in the navigation drawer is selected.
 		 */
 		void onNavigationDrawerItemSelected(int position);
+		void onListsChanged(ArrayList<ToDoList> lists);
 	}
 }

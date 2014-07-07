@@ -1,26 +1,14 @@
 package dyl.anjon.es.models;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import android.util.Log;
-
-import com.dropbox.sync.android.DbxAccountManager;
-import com.dropbox.sync.android.DbxException;
-import com.dropbox.sync.android.DbxException.Unauthorized;
-import com.dropbox.sync.android.DbxFile;
-import com.dropbox.sync.android.DbxFileSystem;
-import com.dropbox.sync.android.DbxPath;
-import com.dropbox.sync.android.DbxPath.InvalidPathException;
 
 public class ToDoList {
 
 	private String name;
 	private ArrayList<ToDoItem> items;
-	private final static String LIST_NAME_DELIMITTER = "\n--------------------\n";
-	private final static String LIST_DELIMITTER = "\n\n";
-	private final static String FILENAME = "todo.txt";
-	private final static String LOG_TAG = "ToDo";
+	public final static String LIST_NAME_DELIMITTER = "\n--------------------\n";
+	public final static String LIST_DELIMITTER = "\n\n\n";
+	public final static String FILENAME = "todo.txt";
 
 	public ToDoList(String name) {
 		this.name = name;
@@ -74,93 +62,6 @@ public class ToDoList {
 		string.append(LIST_DELIMITTER);
 
 		return string.toString();
-	}
-
-	public static boolean saveListsForAccount(ArrayList<ToDoList> lists,
-			DbxAccountManager mDbxAcctMgr) {
-
-		StringBuilder string = new StringBuilder();
-		for (int i = 0; i < lists.size(); i++) {
-			string.append(lists.get(i).toString());
-		}
-
-		DbxFile testFile = null;
-		try {
-			DbxFileSystem dbxFs = DbxFileSystem.forAccount(mDbxAcctMgr
-					.getLinkedAccount());
-			DbxPath filePath = new DbxPath(FILENAME);
-			if (dbxFs.exists(filePath)) {
-				testFile = dbxFs.open(filePath);
-			}
-			else {
-				testFile = dbxFs.create(filePath);
-			}
-			testFile.writeString(string.toString());
-		} catch (Unauthorized e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} catch (InvalidPathException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} catch (DbxException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} catch (IOException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} finally {
-			if (testFile != null) {
-				testFile.close();
-			}
-		}
-		return true;
-	}
-
-	public static ArrayList<ToDoList> openListsForAccount(DbxAccountManager mDbxAcctMgr) {
-		ArrayList<ToDoList> lists = new ArrayList<ToDoList>();
-
-		DbxFile testFile = null;
-		String contents = "";
-		try {
-			DbxFileSystem dbxFs = DbxFileSystem.forAccount(mDbxAcctMgr
-					.getLinkedAccount());
-			DbxPath filePath = new DbxPath(FILENAME);
-			if (dbxFs.exists(filePath)) {
-				testFile = dbxFs.open(filePath);
-			}
-			else {
-				testFile = dbxFs.create(filePath);
-			}
-			contents = testFile.readString();
-		} catch (InvalidPathException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} catch (DbxException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} catch (IOException e) {
-			Log.e(LOG_TAG, e.getMessage());
-		} finally {
-			if (testFile != null) {
-				testFile.close();
-			}
-		}
-		
-		String listStrings[] = contents.split(LIST_DELIMITTER);
-		for(int i = 0; i < listStrings.length; i++) {
-			String listComponents[] = listStrings[i].split(LIST_NAME_DELIMITTER);
-			ToDoList list = new ToDoList(listComponents[0]);
-			if (listComponents.length > 1) {
-				String listItems[] = listComponents[1].split(ToDoItem.ITEM_DELIMITTER);
-				for(int j = 0; j < listItems.length; j++) {
-					String itemString = listItems[j].substring(2);
-					ToDoItem item = new ToDoItem(itemString);
-					if (listItems[j].startsWith(ToDoItem.DONE)) {
-						item.setIsDone(true);
-					} else if(listItems[j].startsWith(ToDoItem.NOT_DONE)) {
-						item.setIsDone(false);
-					}
-					list.add(item);
-				}
-			}
-			lists.add(list);
-		}
-
-		return lists;
 	}
 
 }

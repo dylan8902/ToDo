@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -17,6 +18,8 @@ import com.dropbox.sync.android.DbxAccountManager;
 import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.fragments.ListFragment;
 import dyl.anjon.es.todo.fragments.NavigationDrawerFragment;
+import dyl.anjon.es.todo.utils.FileUtils;
+import dyl.anjon.es.todo.utils.Utils;
 
 public class MainActivity extends ActionBarActivity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -63,16 +66,6 @@ public class MainActivity extends ActionBarActivity implements
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
-
-		// Set up the lists.
-		/*
-		 * ToDoList shoppingList = new ToDoList("Shopping");
-		 * shoppingList.add("Cheese"); shoppingList.add("Milk"); ToDoItem bread
-		 * = new ToDoItem("Bread"); bread.setIsDone(true);
-		 * shoppingList.add(bread); shoppingList.add("Cake"); ToDoList tddList =
-		 * new ToDoList("TDD"); tddList.add("Create cool todo app"); lists = new
-		 * ArrayList<ToDoList>(); lists.add(shoppingList); lists.add(tddList);
-		 */
 		openLists();
 
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
@@ -96,6 +89,12 @@ public class MainActivity extends ActionBarActivity implements
 		saveLists();
 	}
 
+	@Override
+	public void onListsChanged(ArrayList<ToDoList> lists) {
+		this.lists = lists;
+		saveLists();
+	}
+
 	public void restoreActionBar() {
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -110,6 +109,7 @@ public class MainActivity extends ActionBarActivity implements
 			restoreActionBar();
 			return true;
 		}
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -141,6 +141,7 @@ public class MainActivity extends ActionBarActivity implements
 			mDbxAcctMgr.startLink((Activity) this, REQUEST_LINK_TO_DBX);
 			return true;
 		case R.id.action_add_list:
+			Log.d(Utils.LOG_TAG, "Adding from the MainActivity");
 			lists.add(new ToDoList("new"));
 			saveLists();
 			return true;
@@ -168,13 +169,13 @@ public class MainActivity extends ActionBarActivity implements
 
 	public void saveLists() {
 		if (mDbxAcctMgr.hasLinkedAccount()) {
-			ToDoList.saveListsForAccount(lists, mDbxAcctMgr);
+			FileUtils.saveListsForAccount(lists, mDbxAcctMgr);
 		}
 	}
 
 	public void openLists() {
 		if (mDbxAcctMgr.hasLinkedAccount()) {
-			lists = ToDoList.openListsForAccount(mDbxAcctMgr);
+			lists = FileUtils.openListsForAccount(mDbxAcctMgr);
 		}
 	}
 
