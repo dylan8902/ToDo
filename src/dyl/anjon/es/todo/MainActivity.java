@@ -37,7 +37,7 @@ public class MainActivity extends ActionBarActivity implements
 	/**
 	 * Used to store the lists of todo lists
 	 */
-	private ArrayList<ToDoList> lists;
+	private ArrayList<ToDoList> lists = new ArrayList<ToDoList>();;
 
 	/**
 	 * Used to store the currently selected list
@@ -153,7 +153,7 @@ public class MainActivity extends ActionBarActivity implements
 						getApplicationContext(),
 						getString(R.string.db_app_key),
 						getString(R.string.db_app_secret));
-				saveLists();
+				openLists();
 			} else {
 
 			}
@@ -163,11 +163,15 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	public void saveLists() {
-		ToDoList.saveListsForAccount(lists, mDbxAcctMgr);
+		if (mDbxAcctMgr.hasLinkedAccount()) {
+			ToDoList.saveListsForAccount(lists, mDbxAcctMgr);
+		}
 	}
 
 	public void openLists() {
-		lists = ToDoList.openListsForAccount(mDbxAcctMgr);
+		if (mDbxAcctMgr.hasLinkedAccount()) {
+			lists = ToDoList.openListsForAccount(mDbxAcctMgr);
+		}
 	}
 
 }

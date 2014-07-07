@@ -120,9 +120,14 @@ public class ToDoList {
 		try {
 			DbxFileSystem dbxFs = DbxFileSystem.forAccount(mDbxAcctMgr
 					.getLinkedAccount());
-			testFile = dbxFs.open(new DbxPath(FILENAME));
+			DbxPath filePath = new DbxPath(FILENAME);
+			if (dbxFs.exists(filePath)) {
+				testFile = dbxFs.open(filePath);
+			}
+			else {
+				testFile = dbxFs.create(filePath);
+			}
 			contents = testFile.readString();
-			Log.d("Dropbox Test", "File contents: " + contents);
 		} catch (InvalidPathException e) {
 			Log.e(LOG_TAG, e.getMessage());
 		} catch (DbxException e) {
@@ -139,17 +144,18 @@ public class ToDoList {
 		for(int i = 0; i < listStrings.length; i++) {
 			String listComponents[] = listStrings[i].split(LIST_NAME_DELIMITTER);
 			ToDoList list = new ToDoList(listComponents[0]);
-			String listItems[] = listComponents[1].split(ToDoItem.ITEM_DELIMITTER);
-			for(int j = 0; j < listItems.length; j++) {
-				String itemString = listItems[j].substring(2);
-				Log.i(LOG_TAG, itemString);
-				ToDoItem item = new ToDoItem(itemString);
-				if (listItems[j].startsWith(ToDoItem.DONE)) {
-					item.setIsDone(true);
-				} else if(listItems[j].startsWith(ToDoItem.NOT_DONE)) {
-					item.setIsDone(false);
+			if (listComponents.length > 1) {
+				String listItems[] = listComponents[1].split(ToDoItem.ITEM_DELIMITTER);
+				for(int j = 0; j < listItems.length; j++) {
+					String itemString = listItems[j].substring(2);
+					ToDoItem item = new ToDoItem(itemString);
+					if (listItems[j].startsWith(ToDoItem.DONE)) {
+						item.setIsDone(true);
+					} else if(listItems[j].startsWith(ToDoItem.NOT_DONE)) {
+						item.setIsDone(false);
+					}
+					list.add(item);
 				}
-				list.add(item);
 			}
 			lists.add(list);
 		}

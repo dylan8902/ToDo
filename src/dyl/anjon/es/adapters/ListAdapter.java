@@ -7,9 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
+import android.widget.TextView;
 import dyl.anjon.es.models.ToDoItem;
 import dyl.anjon.es.todo.R;
 
@@ -41,17 +40,15 @@ public class ListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = inflater.inflate(R.layout.row_item, null);
-		final ToDoItem item = items.get(position);
-		CheckBox name = (CheckBox) v.findViewById(R.id.name);
-		name.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				item.setIsDone(isChecked);
-			}
-		});
+		ToDoItem item = items.get(position);
+		TextView name = (TextView) v.findViewById(R.id.name);
 		name.setText(item.getName());
-		name.setChecked(item.isDone());
+		if (item.isDone()) {
+			ImageView done = (ImageView) v.findViewById(R.id.done);
+			done.setVisibility(View.VISIBLE);
+		} else {
+			ImageView notDone = (ImageView) v.findViewById(R.id.not_done);
+			notDone.setVisibility(View.VISIBLE);		}
 		return v;
 	}
 
