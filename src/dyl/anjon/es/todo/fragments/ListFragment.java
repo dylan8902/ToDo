@@ -128,9 +128,6 @@ public class ListFragment extends Fragment {
 	 * implement.
 	 */
 	public static interface ListCallbacks {
-		/**
-		 * Called when the list changes.
-		 */
 		void onListChanged(ToDoList list);
 	}
 

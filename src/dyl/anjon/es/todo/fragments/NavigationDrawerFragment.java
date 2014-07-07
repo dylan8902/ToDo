@@ -11,13 +11,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,7 +19,6 @@ import android.widget.ListView;
 import dyl.anjon.es.adapters.NavigationDrawerAdapter;
 import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.R;
-import dyl.anjon.es.todo.utils.Utils;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -65,9 +58,6 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		// Indicate that this fragment would like to influence the set of
-		// actions in the action bar.
-		setHasOptionsMenu(true);
 	}
 
 	@Override
@@ -102,7 +92,8 @@ public class NavigationDrawerFragment extends Fragment {
 												lists.remove(index);
 												adapter.refresh(lists);
 												if (mCallbacks != null) {
-													mCallbacks.onListsChanged(lists);
+													mCallbacks
+															.onListsChanged(lists);
 												}
 											}
 										}).show();
@@ -132,25 +123,18 @@ public class NavigationDrawerFragment extends Fragment {
 	 */
 	public void setUp(int fragmentId, DrawerLayout drawerLayout,
 			ArrayList<ToDoList> lists) {
-		mFragmentContainerView = getActivity().findViewById(fragmentId);
-		mDrawerLayout = drawerLayout;
 		this.lists = lists;
 		adapter.refresh(lists);
 
-		// set a custom shadow that overlays the main content when the drawer
-		// opens
+		mFragmentContainerView = getActivity().findViewById(fragmentId);
+		mDrawerLayout = drawerLayout;
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayHomeAsUpEnabled(true);
-		actionBar.setHomeButtonEnabled(true);
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
-		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), /* host Activity */
-		mDrawerLayout, R.drawable.ic_drawer, R.string.navigation_drawer_open,
+		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout,
+				R.drawable.ic_drawer, R.string.navigation_drawer_open,
 				R.string.navigation_drawer_close) {
 			@Override
 			public void onDrawerClosed(View drawerView) {
@@ -158,7 +142,6 @@ public class NavigationDrawerFragment extends Fragment {
 				if (!isAdded()) {
 					return;
 				}
-
 				getActivity().supportInvalidateOptionsMenu();
 			}
 
@@ -221,54 +204,11 @@ public class NavigationDrawerFragment extends Fragment {
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// If the drawer is open, show the global app actions in the action bar.
-		// See also
-		// showGlobalContextActionBar, which controls the top-left area of the
-		// action bar.
-		if (mDrawerLayout != null && isDrawerOpen()) {
-			inflater.inflate(R.menu.global, menu);
-			showGlobalContextActionBar();
-		}
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		Log.d(Utils.LOG_TAG, "Menu item selected in Nav Drawer: " + item.getTitle());
-		
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
-
-		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * Per the navigation drawer design guidelines, updates the action bar to
-	 * show the global app 'context', rather than just what's in the current
-	 * screen.
-	 */
-	private void showGlobalContextActionBar() {
-		ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		actionBar.setTitle(R.string.app_name);
-	}
-
-	private ActionBar getActionBar() {
-		return ((ActionBarActivity) getActivity()).getSupportActionBar();
-	}
-
 	/**
 	 * Callbacks interface that all activities using this fragment must
 	 * implement.
 	 */
 	public static interface NavigationDrawerCallbacks {
-		/**
-		 * Called when an item in the navigation drawer is selected.
-		 */
 		void onNavigationDrawerItemSelected(int position);
 		void onListsChanged(ArrayList<ToDoList> lists);
 	}

@@ -102,13 +102,16 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (!mNavigationDrawerFragment.isDrawerOpen()) {
-			getMenuInflater().inflate(R.menu.main, menu);
+		if (mNavigationDrawerFragment.isDrawerOpen()) {
+			getMenuInflater().inflate(R.menu.navigation_drawer_open, menu);
+			mTitle = getString(R.string.app_name);
+			restoreActionBar();
+			return true;
+		} else {
+			getMenuInflater().inflate(R.menu.list, menu);
 			restoreActionBar();
 			return true;
 		}
-
-		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
