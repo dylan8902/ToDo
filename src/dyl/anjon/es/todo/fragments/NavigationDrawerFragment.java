@@ -3,6 +3,8 @@ package dyl.anjon.es.todo.fragments;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -19,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import dyl.anjon.es.adapters.NavigationDrawerAdapter;
 import dyl.anjon.es.models.ToDoList;
 import dyl.anjon.es.todo.R;
@@ -81,10 +82,32 @@ public class NavigationDrawerFragment extends Fragment {
 						selectItem(position);
 					}
 				});
-		
+
+		mDrawerListView
+				.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+					public boolean onItemLongClick(AdapterView<?> parent,
+							View view, final int index, long id) {
+						ToDoList list = (ToDoList) adapter.getItem(index);
+						new AlertDialog.Builder(getActivity())
+								.setTitle(list.getName())
+								.setMessage("Remove list?")
+								.setNegativeButton("No", null)
+								.setPositiveButton("Yes",
+										new DialogInterface.OnClickListener() {
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												lists.remove(index);
+												adapter.refresh(lists);
+											}
+										}).show();
+						return true;
+					}
+				});
+
 		adapter = new NavigationDrawerAdapter(inflater, lists);
 		mDrawerListView.setAdapter(adapter);
-		mDrawerListView.setItemChecked(0, true);
+
 		return mDrawerListView;
 	}
 
@@ -102,7 +125,8 @@ public class NavigationDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(int fragmentId, DrawerLayout drawerLayout, ArrayList<ToDoList> lists) {
+	public void setUp(int fragmentId, DrawerLayout drawerLayout,
+			ArrayList<ToDoList> lists) {
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
 		this.lists = lists;
@@ -211,9 +235,12 @@ public class NavigationDrawerFragment extends Fragment {
 			return true;
 		}
 
-		if (item.getItemId() == R.id.action_example) {
-			Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT)
-					.show();
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			// settings activity
+			return true;
+		case R.id.action_add_list:
+			lists.add(new ToDoList("new"));
 			return true;
 		}
 

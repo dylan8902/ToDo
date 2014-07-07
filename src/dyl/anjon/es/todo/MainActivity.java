@@ -140,6 +140,10 @@ public class MainActivity extends ActionBarActivity implements
 		case R.id.action_link_db:
 			mDbxAcctMgr.startLink((Activity) this, REQUEST_LINK_TO_DBX);
 			return true;
+		case R.id.action_add_list:
+			lists.add(new ToDoList("new"));
+			saveLists();
+			return true;
 		}
 
 		return super.onOptionsItemSelected(item);

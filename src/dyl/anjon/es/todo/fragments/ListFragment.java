@@ -39,7 +39,8 @@ public class ListFragment extends Fragment {
 		adapter = new ListAdapter(inflater, list.getItems());
 		v.setAdapter(adapter);
 
-		final EditText addItem = (EditText) rootView.findViewById(R.id.add_item);
+		final EditText addItem = (EditText) rootView
+				.findViewById(R.id.add_item);
 		addItem.setImeActionLabel("Add", KeyEvent.KEYCODE_ENTER);
 		addItem.setOnKeyListener(new OnKeyListener() {
 			@Override
@@ -60,7 +61,7 @@ public class ListFragment extends Fragment {
 				return false;
 			}
 		});
-		
+
 		v.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int index, long id) {
@@ -87,23 +88,24 @@ public class ListFragment extends Fragment {
 						.setTitle(item.getName())
 						.setMessage("Remove from list?")
 						.setNegativeButton("No", null)
-						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-								list.getItems().remove(index);
-								adapter.refresh(list.getItems());
-								if (mCallbacks != null) {
-									mCallbacks.onListChanged(list);
-								}
-							}
-						}).show();
+						.setPositiveButton("Yes",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+										list.getItems().remove(index);
+										adapter.refresh(list.getItems());
+										if (mCallbacks != null) {
+											mCallbacks.onListChanged(list);
+										}
+									}
+								}).show();
 				return true;
 			}
 		});
 
 		return rootView;
 	}
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -114,7 +116,13 @@ public class ListFragment extends Fragment {
 					"Activity must implement ListCallbacks.");
 		}
 	}
-	
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallbacks = null;
+	}
+
 	/**
 	 * Callbacks interface that all activities using this fragment must
 	 * implement.

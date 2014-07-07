@@ -29,8 +29,8 @@ public class NavigationDrawerAdapter extends BaseAdapter {
 		return lists.size();
 	}
 
-	public String getItem(int position) {
-		return lists.get(position).getName();
+	public ToDoList getItem(int position) {
+		return lists.get(position);
 	}
 
 	public long getItemId(int position) {
