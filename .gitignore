@@ -1,8 +1,4 @@
 
 *.apk
 /bin/*
-
-res/values/keys.xml
 .settings*
-res/values/strings.xml
-res/values/strings.xml
