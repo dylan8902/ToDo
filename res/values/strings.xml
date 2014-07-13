@@ -12,5 +12,7 @@
     <string name="action_link_db">Sync with Dropbox</string>
     <string name="add_item_hint">Add new item</string>
     <string name="action_add_list">New List</string>
+    <string name="db_app_key">lml1d9t4snpn1n0</string>
+    <string name="db_app_secret">piiekigrhl2yfn1</string>
     
 </resources>
