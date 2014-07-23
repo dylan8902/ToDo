@@ -3,6 +3,8 @@ package dyl.anjon.es.todo;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 import com.dropbox.sync.android.DbxAccountManager;
 
@@ -142,10 +145,23 @@ public class MainActivity extends ActionBarActivity implements
 			mDbxAcctMgr.startLink((Activity) this, REQUEST_LINK_TO_DBX);
 			return true;
 		case R.id.action_add_list:
-			ToDoList list = new ToDoList("new");
-			lists.add(list);
-			mNavigationDrawerFragment.adapter.refresh(lists);
-			saveLists();
+			final EditText name = new EditText(this);
+			name.setHint("Enter name for new list");
+			new AlertDialog.Builder(this)
+			.setTitle("New List")
+			.setMessage("Create a new list")
+			.setView(name)
+			.setNegativeButton("Cancel", null)
+			.setPositiveButton("Create",
+					new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,
+								int which) {
+							ToDoList list = new ToDoList(name.getEditableText().toString());
+							lists.add(list);
+							mNavigationDrawerFragment.adapter.refresh(lists);
+							saveLists();
+						}
+					}).show();
 			return true;
 		}
 
