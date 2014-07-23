@@ -52,6 +52,8 @@ public class ListFragment extends Fragment {
 						list.add(item);
 					}
 					addItem.setText("");
+					addItem.requestFocus(); // TODO: Test that this keeps the
+											// view active
 					adapter.refresh(list.getItems());
 					if (mCallbacks != null) {
 						mCallbacks.onListChanged(list);
@@ -77,7 +79,6 @@ public class ListFragment extends Fragment {
 				}
 				return;
 			}
-
 		});
 
 		v.setOnItemLongClickListener(new OnItemLongClickListener() {
