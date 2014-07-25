@@ -105,20 +105,24 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		getMenuInflater().inflate(R.menu.list, menu);
 		if (mNavigationDrawerFragment.isDrawerOpen()) {
-			getMenuInflater().inflate(R.menu.navigation_drawer_open, menu);
 			mTitle = getString(R.string.app_name);
 			restoreActionBar();
-			return true;
 		} else {
-			getMenuInflater().inflate(R.menu.list, menu);
+			if (selectedListIndex > 0) {
+				ToDoList list = lists.get(selectedListIndex);
+				mTitle = list.getName();
+			}
 			restoreActionBar();
-			return true;
 		}
+		return true;
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
 		MenuItem action = menu.findItem(R.id.action_link_db);
 		MenuItem profile = menu.findItem(R.id.db_profile);
 		if ((action != null) && (profile != null)) {
@@ -132,7 +136,7 @@ public class MainActivity extends ActionBarActivity implements
 			}
 		}
 
-		return super.onPrepareOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -148,20 +152,21 @@ public class MainActivity extends ActionBarActivity implements
 			final EditText name = new EditText(this);
 			name.setHint("Enter name for new list");
 			new AlertDialog.Builder(this)
-			.setTitle("New List")
-			.setMessage("Create a new list")
-			.setView(name)
-			.setNegativeButton("Cancel", null)
-			.setPositiveButton("Create",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int which) {
-							ToDoList list = new ToDoList(name.getEditableText().toString());
-							lists.add(list);
-							mNavigationDrawerFragment.adapter.refresh(lists);
-							saveLists();
-						}
-					}).show();
+					.setTitle("New List")
+					.setView(name)
+					.setNegativeButton("Cancel", null)
+					.setPositiveButton("Create",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									ToDoList list = new ToDoList(name
+											.getEditableText().toString());
+									lists.add(list);
+									mNavigationDrawerFragment.adapter
+											.refresh(lists);
+									saveLists();
+								}
+							}).show();
 			return true;
 		}
 
