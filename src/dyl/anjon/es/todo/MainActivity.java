@@ -190,6 +190,20 @@ public class MainActivity extends ActionBarActivity implements
 		}
 	}
 
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this)
+				.setTitle("Quit")
+				.setMessage("Are you sure you want to quit?")
+				.setPositiveButton("Yes",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+								finish();
+							}
+						}).setNegativeButton("No", null).show();
+	}
+
 	public void saveLists() {
 		if (mDbxAcctMgr.hasLinkedAccount()) {
 			FileUtils.saveListsForAccount(lists, mDbxAcctMgr);
