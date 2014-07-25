@@ -5,8 +5,8 @@ public class ToDoItem {
 	private String name;
 	private boolean isDone;
 	public final static String ITEM_DELIMITTER = "\n";
-	public final static String DONE = "✔ ";
-	public final static String NOT_DONE = "- ";
+	public final static String DONE = "- ";
+	public final static String NOT_DONE = "+ ";
 
 	public ToDoItem(String name) {
 		this.name = name;

@@ -102,12 +102,12 @@ public class FileUtils {
 		if (listComponents.length > 1) {
 			String listItems[] = listComponents[1]
 					.split(ToDoItem.ITEM_DELIMITTER);
-			for (int j = 0; j < listItems.length; j++) {
-				String itemString = listItems[j].substring(2);
+			for (int i = 0; i < listItems.length; i++) {
+				String itemString = listItems[i].substring(2);
 				ToDoItem item = new ToDoItem(itemString);
-				if (listItems[j].startsWith(ToDoItem.DONE)) {
+				if (listItems[i].startsWith(ToDoItem.DONE)) {
 					item.setIsDone(true);
-				} else if (listItems[j].startsWith(ToDoItem.NOT_DONE)) {
+				} else if (listItems[i].startsWith(ToDoItem.NOT_DONE)) {
 					item.setIsDone(false);
 				}
 				list.add(item);
