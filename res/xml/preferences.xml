@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">    
+    <PreferenceCategory 
+        android:title="View"
+        android:key="view">
+        <CheckBoxPreference
+            android:key="hide_done_items"
+            android:title="@string/hide_done_items"
+            android:summary="@string/hide_done_items_summary"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

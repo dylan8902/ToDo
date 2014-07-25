@@ -109,14 +109,12 @@ public class MainActivity extends ActionBarActivity implements
 		getMenuInflater().inflate(R.menu.list, menu);
 		if (mNavigationDrawerFragment.isDrawerOpen()) {
 			mTitle = getString(R.string.app_name);
-			restoreActionBar();
-		} else {
-			if (selectedListIndex > 0) {
-				ToDoList list = lists.get(selectedListIndex);
-				mTitle = list.getName();
-			}
-			restoreActionBar();
+		} else if (selectedListIndex > 0) {
+			ToDoList list = lists.get(selectedListIndex);
+			mTitle = list.getName();
+
 		}
+		restoreActionBar();
 		return true;
 	}
 
@@ -143,7 +141,9 @@ public class MainActivity extends ActionBarActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.action_settings:
-			// settings activity
+			Intent intent = new Intent().setClass(getApplicationContext(),
+					SettingsActivity.class);
+			startActivity(intent);
 			return true;
 		case R.id.action_link_db:
 			mDbxAcctMgr.startLink((Activity) this, REQUEST_LINK_TO_DBX);
