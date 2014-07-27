@@ -76,9 +76,9 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		selectedListIndex = position;
 		ToDoList list = lists.get(selectedListIndex);
-		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
 				.replace(R.id.container, new ListFragment(list)).commit();
 		mTitle = list.getName();

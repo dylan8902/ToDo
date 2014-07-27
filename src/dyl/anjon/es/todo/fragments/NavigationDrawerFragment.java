@@ -79,7 +79,7 @@ public class NavigationDrawerFragment extends Fragment {
 				.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 					public boolean onItemLongClick(AdapterView<?> parent,
 							View view, final int index, long id) {
-						ToDoList list = (ToDoList) adapter.getItem(index);
+						final ToDoList list = (ToDoList) adapter.getItem(index);
 						new AlertDialog.Builder(getActivity())
 								.setTitle(list.getName())
 								.setMessage("Remove list?")
@@ -89,9 +89,10 @@ public class NavigationDrawerFragment extends Fragment {
 											public void onClick(
 													DialogInterface dialog,
 													int which) {
-												lists.remove(index);
+												lists.remove(list);
 												adapter.refresh(lists);
 												if (mCallbacks != null) {
+													selectItem(0);
 													mCallbacks
 															.onListsChanged(lists);
 												}
